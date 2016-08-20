@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "./ts/",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es5",
     "jsx": "react"
   },
-  "files": [
+  "include": [
     "./typings/index.d.ts",
-    "./src/components/App.tsx",
+    "./src/components/*.tsx",
     "./src/index.tsx"
   ]
 }

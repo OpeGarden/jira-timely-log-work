@@ -1,9 +1,11 @@
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main : ['./src/index.tsx', './src/style.sass'],
-        vendor: ['./src/vendor/vendor.ts', './src/vendor/vendor.sass']
+        main : ['./src/index.tsx', './src/style.scss'],
+        vendor: ['./src/vendor/vendor.ts', './src/vendor/style.js'],
+        fonts: ['./src/vendor/fonts.js']
     },
 
     output: {
@@ -27,6 +29,23 @@ module.exports = {
                 test: /\.sass($|\?)|\.scss($|\?)|\.css($|\?)/,
                 loader: ExtractTextPlugin.extract("style-loader", "css?sourceMap!sass?sourceMap")
             },
+
+            {
+                test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=application/font-woff"
+            }, {
+                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=application/font-woff"
+            }, {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=application/octet-stream"
+            }, {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "file"
+            }, {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=image/svg+xml"
+            }
         ],
 
         preLoaders: [
@@ -37,8 +56,11 @@ module.exports = {
 
 
     plugins: [
-        new ExtractTextPlugin("[name].css", {  allChunks: true })
-    ],
+        new ExtractTextPlugin("[name].css", {  allChunks: true }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: ['vendor'].reverse()
+        })
+    ]
 
     // When importing a module whose path matches one of the following, just
     // assume a corresponding global variable exists and use that instead.
